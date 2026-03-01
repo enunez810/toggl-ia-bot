@@ -83,7 +83,7 @@ foreach ($lines as $line) {
         if ($http_code == 200 || $http_code == 201) {
             $resultados[] = "✅ $desc";
         } else {
-            $resultados[] = "❌ Error::: $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_ID";
+            $resultados[] = "❌ Error_> $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_ID";
         }
     }
     curl_close($ch);
