@@ -10,7 +10,7 @@ $WORKSPACE_ID = getenv("TOGGL_WORKSPACE_ID");
 
 /**/
 $PROJECT_ID = getenv("TOGGL_LIFE_PROJECT_ID");
-$TAG_ID = getenv("TOGGL_TAG_ANALISIS_ID");
+$TAG_ID = getenv("TOGGL_TAG_MAILS_ID");
 
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
@@ -83,7 +83,7 @@ foreach ($lines as $line) {
         if ($http_code == 200 || $http_code == 201) {
             $resultados[] = "✅ $desc";
         } else {
-            $resultados[] = "❌ Error_> $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_ID";
+            $resultados[] = "❌ Error-> $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_ID";
         }
     }
     curl_close($ch);
