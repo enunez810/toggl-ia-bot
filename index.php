@@ -2,7 +2,7 @@
 
 date_default_timezone_set(getenv("TZ") ?: "America/Argentina/Buenos_Aires");
 
-$TOKEN = "TU_TOKEN_TELEGRAM";
+$TOKEN = "991678233586d672670d1da8a5dcf8aa";
 $MI_USER_ID = 1101538753;
 
 $TOGGL_API_TOKEN = getenv("TOGGL_API_TOKEN");
