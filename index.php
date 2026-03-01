@@ -1,5 +1,33 @@
 <?php
 
+function getProjectId($project_name, $workspace_id, $api_token) {
+
+    static $cache = [];
+
+    if (isset($cache[$project_name])) {
+        return $cache[$project_name];
+    }
+
+    $ch = curl_init("https://api.track.toggl.com/api/v9/workspaces/$workspace_id/projects");
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERPWD, "$api_token:api_token");
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $projects = json_decode($response, true);
+
+    foreach ($projects as $project) {
+        if (strcasecmp($project["name"], $project_name) == 0) {
+            $cache[$project_name] = $project["id"];
+            return $project["id"];
+        }
+    }
+
+    return null;
+}
+
 date_default_timezone_set(getenv("TZ") ?: "America/Argentina/Buenos_Aires");
 
 $TOKEN = "8689749336:AAFP465sHej4857JisWra4qb0DCwQJA1Kkk";
@@ -34,6 +62,7 @@ $resultados = [];
 
 foreach ($lines as $line) {
 
+  //if (!preg_match('/(\d{1,2}):?(\d{0,2})?\s*a\s*(\d{1,2}):?(\d{0,2})?\s+(.*)/i', $line, $m)) {
     if (!preg_match('/(\d{1,2}):?(\d{0,2})?\s*a\s*(\d{1,2}):?(\d{0,2})?\s+(.*)/i', $line, $m)) {
         continue;
     }
@@ -42,7 +71,13 @@ foreach ($lines as $line) {
     $m1 = $m[2] ?: "00";
     $h2 = $m[3];
     $m2 = $m[4] ?: "00";
-    $desc = $m[5];
+    
+    //$desc = $m[5];
+    $full = trim($m[5]);
+    $parts = explode(" - ", $full);
+    $desc = trim($parts[0] ?? "");
+    $project_name = trim($parts[1] ?? "");
+    $tag_name = trim($parts[2] ?? "");    
 
     $start = strtotime("$h1:$m1");
     $end = strtotime("$h2:$m2");
@@ -51,14 +86,22 @@ foreach ($lines as $line) {
 
     $start_iso = date("Y-m-d\TH:i:sP", $start);
 
+    $project_id = getProjectId($project_name, $WORKSPACE_ID, $TOGGL_API_TOKEN);
+
+    if (!$project_id) {
+        $resultados[] = "❌ Proyecto no encontrado: $project_name";
+        continue;
+    }
+
+    
     $data = [
         "created_with" => "Telegram IA Bot",
         "description" => $desc,
         "start" => $start_iso,
         "duration" => $duration,
-        "workspace_id" => (int)$WORKSPACE_ID, 
-        "project_id" => (int)$PROJECT_ID,
-        "tags" => [$TAG_NAME]
+        "workspace_id" => (int)$WORKSPACE_ID,
+        "project_id" => (int)$project_id,
+        "tags" => [$tag_name]
     ];
 
     $ch = curl_init("https://api.track.toggl.com/api/v9/workspaces/$WORKSPACE_ID/time_entries");
