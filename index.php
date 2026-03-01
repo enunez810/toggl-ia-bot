@@ -10,7 +10,7 @@ $WORKSPACE_ID = getenv("TOGGL_WORKSPACE_ID");
 
 /**/
 $PROJECT_ID = getenv("TOGGL_LIFE_PROJECT_ID");
-$TAG_ID = getenv("TOGGL_TAG_MAILS_ID");
+$TAG_ID = getenv("TOGGL_TAG_ANALISIS_ID");
 
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
