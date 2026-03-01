@@ -10,7 +10,7 @@ $WORKSPACE_ID = getenv("TOGGL_WORKSPACE_ID");
 
 /**/
 $PROJECT_ID = getenv("TOGGL_LIFE_PROJECT_ID");
-$TAG_ID = getenv("TOGGL_TAG_PROGRAMA");
+$TAG_NAME = getenv("TOGGL_TAG_PROGRAMA");
 
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
@@ -58,7 +58,7 @@ foreach ($lines as $line) {
         "duration" => $duration,
         "workspace_id" => (int)$WORKSPACE_ID, 
         "project_id" => (int)$PROJECT_ID,
-        "tags" => [(int)$TAG_ID]
+        "tags" => [$TAG_NAME]
     ];
 
     $ch = curl_init("https://api.track.toggl.com/api/v9/workspaces/$WORKSPACE_ID/time_entries");
@@ -83,7 +83,7 @@ foreach ($lines as $line) {
         if ($http_code == 200 || $http_code == 201) {
             $resultados[] = "✅ $desc";
         } else {
-            $resultados[] = "❌ Error--> $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_ID";
+            $resultados[] = "❌ Error-*-> $http_code en: $desc\n$response\n$PROJECT_ID \n$TAG_NAME";
         }
     }
     curl_close($ch);
