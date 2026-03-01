@@ -68,6 +68,18 @@ foreach ($lines as $line) {
     curl_setopt($ch, CURLOPT_USERPWD, "$TOGGL_API_TOKEN:api_token");
 
     $response = curl_exec($ch);
+
+    if ($response === false) {
+        $resultados[] = "❌ Error CURL en: $desc";
+    } else {
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+        if ($http_code == 200 || $http_code == 201) {
+            $resultados[] = "✅ $desc";
+        } else {
+            $resultados[] = "❌ Error $http_code en: $desc\n$response";
+        }
+    }
     curl_close($ch);
 
     $resultados[] = "✅ $desc";
