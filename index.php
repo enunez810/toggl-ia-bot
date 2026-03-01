@@ -14,6 +14,7 @@ $update = json_decode($content, true);
 if (!$update) exit;
 
 $message = $update["message"] ?? null;
+
 if (!$message) exit;
 
 $user_id = $message["from"]["id"];
