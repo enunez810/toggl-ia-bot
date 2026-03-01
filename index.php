@@ -8,6 +8,10 @@ $MI_USER_ID = 1101538753;
 $TOGGL_API_TOKEN = getenv("TOGGL_API_TOKEN");
 $WORKSPACE_ID = getenv("TOGGL_WORKSPACE_ID");
 
+/**/
+$PROJECT_ID = getenv("TOGGL_LIFE_PROJECT_ID");
+$TAG_ID = getenv("TOGGL_TAG_MAILS_ID");
+
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
 
@@ -52,7 +56,9 @@ foreach ($lines as $line) {
         "description" => $desc,
         "start" => $start_iso,
         "duration" => $duration,
-        "workspace_id" => (int)$WORKSPACE_ID
+        "workspace_id" => (int)$WORKSPACE_ID, 
+        "project_id" => (int)$PROJECT_ID,
+        "tags" => [(int)$TAG_ID]
     ];
 
     $ch = curl_init("https://api.track.toggl.com/api/v9/workspaces/$WORKSPACE_ID/time_entries");
