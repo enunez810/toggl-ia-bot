@@ -167,7 +167,7 @@ foreach ($lines as $line) {
     }
     curl_close($ch);
 
-    $resultados[] = "✅ $desc";
+    //$resultados[] = "✅ $desc";
 }
 
 $respuesta = "Registros cargados:\n\n" . implode("\n", $resultados);
