@@ -8,6 +8,42 @@ function getProjectId($project_name, $workspace_id, $api_token) {
         return $cache[$project_name];
     }
 
+    switch ($project_name) {
+		case 'LIFE':
+		case 'MYM_LIFE':
+			$project_name = 'MYM_LIFE';
+			break;
+
+		case 'Galicia':
+			$project_name = 'MYM_Galicia';
+			break;
+
+		case 'Interna':
+		case 'Interno':
+			$project_name = 'ARG_Actividades Internas';
+			break;
+
+		case 'InMotion':
+		case 'In-Motion':
+			$project_name = 'ARG-In Motion';
+			break;
+
+		case 'FUERA':
+			$project_name = 'ARG_FUERA de la OFICINA';
+			break;
+
+		case 'LIFE':
+			$project_name = 'MYM_Life';
+			break;
+
+		case 'SMG':
+		case 'Swiss Medical':
+		case 'Swiss':
+			$project_name = 'MYM_SMG';
+			break;
+
+	}    
+
     $ch = curl_init("https://api.track.toggl.com/api/v9/workspaces/$workspace_id/projects");
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
